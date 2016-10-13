@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "ClickBaitDetector",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Looks for clickbait links",
   /*"browser_action": {
     "default_popup": "chrome2chrome.html",
