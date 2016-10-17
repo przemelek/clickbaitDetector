@@ -5,8 +5,26 @@ for (var t in baits) { if (baits.hasOwnProperty(t)) baitsCount+=baits[t] };
 var properCount = 0;
 for (var t in proper) { if (proper.hasOwnProperty(t)) properCount+=proper[t] };
 
-console.log(baitsCount);
-console.log(properCount);
+function clean(map) {
+  var newMap = {};
+  for (var t in map) {
+    if (map.hasOwnProperty(t)) {
+      if (t.length<3) continue;
+      var s = "";
+      for (var i=0; i<t.length; i++) {
+        var c = t.charAt(i);
+        if (c.toUpperCase()!=c.toLowerCase()) {
+          s+=c;
+        }
+      }
+      newMap[s]=map[t];
+    }
+  }
+  return newMap;
+}
+
+baits=clean(baits);
+proper=clean(proper);
 
 function calc(title) {
   if (!title) return [0,0];
@@ -26,21 +44,25 @@ function calc(title) {
          priors[3]+=" "+word;
       }
       var s = b+p;
-      b=(b*1.0/s+0.1)/2;
-      p=(p*1.0/s+0.1)/2;
-      s = b+p;
-      b/=s;
-      p/=s;
-      priors[0]=priors[0]*b;
-      priors[1]=priors[1]*p;
-      if (wordsCount<3) {
-         priors[0]/=3;
+      if (s>b && s>p) {
+        // b=(b*1.0/s+0.1)/2;
+        // p=(p*1.0/s+0.1)/2;
+        b/=s*1.0;
+        p/=s*1.0;
+        s = b+p;
+        b/=s;
+        p/=s;
+        priors[0]=priors[0]*b;
+        priors[1]=priors[1]*p;
+        // if (wordsCount<3) {
+        //    priors[0]/=3;
+        // }
+        s=priors[0]+priors[1];
+        priors[0]/=s;
+        priors[1]/=s;
+        priors[0]=Math.round(priors[0]*100);
+        priors[1]=Math.round(priors[1]*100);
       }
-      s=priors[0]+priors[1];
-      priors[0]/=s;
-      priors[1]/=s;
-      priors[0]=Math.round(priors[0]*100);
-      priors[1]=Math.round(priors[1]*100);
     }
   }
   if (wordsCount==0) {
@@ -54,7 +76,7 @@ for (var i=0; i<links.length; i++) {
   var title = links[i].innerText;
   var priors=calc(title);
   if (priors[0]>priors[1]*2) {
-    links[i].innerHTML+="<span title='"+priors[0]+"/"+priors[1]+"'>&#x1f4a9;</span>";
+    links[i].innerHTML+="<span title='"+priors[0]+"/"+priors[1]+" "+priors[3]+"'>&#x1f4a9;</span>";
     //t[i].innerHTML+="&#x1f4a9;";
   }
 }
