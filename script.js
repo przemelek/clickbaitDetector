@@ -54,9 +54,6 @@ function calc(title) {
         p/=s;
         priors[0]=priors[0]*b;
         priors[1]=priors[1]*p;
-        // if (wordsCount<3) {
-        //    priors[0]/=3;
-        // }
         s=priors[0]+priors[1];
         priors[0]/=s;
         priors[1]/=s;
@@ -65,7 +62,7 @@ function calc(title) {
       }
     }
   }
-  if (wordsCount==0) {
+  if (wordsCount<3) {
      priors[0]=0;
   }
   priors[2]=wordsCount;
@@ -79,11 +76,12 @@ function markClickBaitLinks() {
     var title = links[i].innerText;
     var priors=calc(title);
     if (priors[0]>priors[1]*2) {
-      links[i].innerHTML+="<span title='"+priors[0]+"/"+priors[1]+" "+priors[3]+"'>&#x1f4a9;</span>";
+      links[i].innerHTML+="<span title='"+priors[0]+"/"+priors[1]+" "+priors[2]+" "+priors[3]+"'>&#x1f4a9;</span>";
       //t[i].innerHTML+="&#x1f4a9;";
     }
   }
   console.log("porcessed")
 }
 
-markClickBaitLinks();
+setTimeout(markClickBaitLinks,1000);
+//markClickBaitLinks();
