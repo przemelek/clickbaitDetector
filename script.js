@@ -1,5 +1,3 @@
-var links=document.getElementsByTagName("a");
-
 var baitsCount = 0;
 for (var t in baits) { if (baits.hasOwnProperty(t)) baitsCount+=baits[t] };
 var properCount = 0;
@@ -17,7 +15,9 @@ function clean(map) {
           s+=c;
         }
       }
-      newMap[s]=map[t];
+      if (s.length>2) {
+        newMap[s]=map[t];
+      }
     }
   }
   return newMap;
@@ -72,11 +72,18 @@ function calc(title) {
   return priors;
 }
 
-for (var i=0; i<links.length; i++) {
-  var title = links[i].innerText;
-  var priors=calc(title);
-  if (priors[0]>priors[1]*2) {
-    links[i].innerHTML+="<span title='"+priors[0]+"/"+priors[1]+" "+priors[3]+"'>&#x1f4a9;</span>";
-    //t[i].innerHTML+="&#x1f4a9;";
+function markClickBaitLinks() {
+  var links=document.getElementsByTagName("a");
+  console.log("will process "+links.length+" links.")
+  for (var i=0; i<links.length; i++) {
+    var title = links[i].innerText;
+    var priors=calc(title);
+    if (priors[0]>priors[1]*2) {
+      links[i].innerHTML+="<span title='"+priors[0]+"/"+priors[1]+" "+priors[3]+"'>&#x1f4a9;</span>";
+      //t[i].innerHTML+="&#x1f4a9;";
+    }
   }
+  console.log("porcessed")
 }
+
+markClickBaitLinks();
