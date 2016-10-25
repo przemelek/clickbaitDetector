@@ -115,6 +115,7 @@ function classify(vec2Classify, model) {
   var s = s1+s0;
   priors[0] = s0/s*100;
   priors[1] = s1/s*100;
+  if (wordsCount<3) priors[0]=0;
   priors[2] = wordsCount;
   return priors;
 }
