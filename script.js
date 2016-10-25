@@ -122,6 +122,7 @@ function classify(vec2Classify, model) {
 function calc2(title) {
   if (!title) return [0,0];
   var elems=title.toString().toLowerCase().split(" ");
+  if (elems.length<3) return [0,0];
   return classify(setOfWords2Vec(myVocabList,elems),model)
 }
 
