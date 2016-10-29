@@ -1,22 +1,15 @@
 {
   "manifest_version": 2,
   "name": "ClickBaitDetector",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Looks for clickbait links",
-  /*"browser_action": {
-    "default_popup": "chrome2chrome.html",
-    "default_icon": "chrome2chrome.png"
-  },*/
   "content_scripts": [
     {
       "matches" : ["http://*/*", "https://*/*"],
-      "js": [/*"baits.js","proper.js",
-        "baitsTitles.js","properTitles.js",*/
-        "model.js","words.js","listClasses.js",
+      "js": ["model/model.js","model/words.js","model/listClasses.js",
         "script.js"]
     }
   ],
-/*  "background": {"page":"background.html"},*/
   "permissions": [
     "tabs", "http://*/*", "https://*/*", "storage"
   ]
