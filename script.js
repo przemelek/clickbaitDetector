@@ -1,24 +1,3 @@
-// var myVocabList = [];
-// function add(array,word) {
-//   if (array.indexOf(word)==-1) {
-//     array.push(word);
-//   }
-// }
-// var baitsCount = 0;
-// var baitsLen = 0;
-// for (var t in baits) { if (baits.hasOwnProperty(t)) { baitsCount+=baits[t]; baitsLen++; add(myVocabList, t); } };
-// console.log("baits count:"+baitsCount);
-// console.log(baitsLen);
-// var properCount = 0;
-// var properLen = 0;
-// for (var t in proper) { if (proper.hasOwnProperty(t)) { properCount+=proper[t]; properLen++; add(myVocabList, t);} };
-// console.log("proper count:"+properCount);
-// console.log(properLen);
-
-// var baitsCount = 0;
-// for (var t in baits) { if (baits.hasOwnProperty(t)) baitsCount++; };
-// var properCount = 0;
-// for (var t in proper) { if (proper.hasOwnProperty(t)) properCount++; };
 
 function setOfWords2Vec(vocabList,inputSet) {
   var returnVec = new Array(vocabList.length);

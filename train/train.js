@@ -96,15 +96,15 @@ var trainMatrix = [];
 for (var i=0; i<docs.length; i++) {
   trainMatrix.push(setOfWords2Vec(myVocabList,docs[i].split(" ")));
 }
-
 console.log(trainMatrix);
+var startTrain = new Date()*1.0;
 var model=train(trainMatrix,listClasses);
-
+var stopTrain = new Date()*1.0;
 fs.writeFile("../model/model.js","var model="+JSON.stringify(model)+";");
 
 fs.writeFile("../model/words.js","var myVocabList="+JSON.stringify(myVocabList)+";");
 
-fs.writeFile("../model/listClasses.js","var listClasses="+JSON.stringify(listClasses)+";");
+//fs.writeFile("../model/listClasses.js","var listClasses="+JSON.stringify(listClasses)+";");
 
 
 // test
@@ -156,7 +156,7 @@ var sumBaits = 0;
 var countBaits = 0;
 var sumProper = 0;
 var countProper = 0;
-
+var startTest = new Date()*1.0;
 for (var i=0; i<data.length; i++) {
   var prop = calc2(data[i].article_title);
   if (data[i].clickbait=="1") {
@@ -181,8 +181,10 @@ for (var i=0; i<data.length; i++) {
     }
   }
 }
-
+var stopTest = new Date()*1.0;
 console.log(hitBaits+" "+missBaits);
 console.log(hitProper+" "+missProper);
 console.log(sumBaits/countBaits);
 console.log(sumProper/countProper);
+console.log(stopTrain-startTrain);
+console.log(stopTest-startTest);

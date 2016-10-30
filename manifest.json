@@ -6,7 +6,7 @@
   "content_scripts": [
     {
       "matches" : ["http://*/*", "https://*/*"],
-      "js": ["model/model.js","model/words.js","model/listClasses.js",
+      "js": ["model/model.js","model/words.js",
         "script.js"]
     }
   ],
