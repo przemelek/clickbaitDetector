@@ -52,14 +52,13 @@ function markClickBaitLinks() {
   var links=document.getElementsByTagName("a");
   // console.log("will process "+links.length+" links.")
   for (var i=0; i<links.length; i++) {
-    if (links[i].clickbait) continue;
+    if (links[i].classified) continue;
     var title = links[i].innerText;
     var priors=calc(title);
     if (priors[0]>priors[1]) {
       links[i].innerHTML+="<span title='"+priors[0]+"/"+priors[1]+" "+priors[2]+" "+priors[3]+"'>&#x1f4a9;</span>";
-      links[i].clickbait="true";
-      //t[i].innerHTML+="&#x1f4a9;";
     }
+    links[i].classified="true";
   }
   // console.log("processed")
   setTimeout(markClickBaitLinks,1000);
