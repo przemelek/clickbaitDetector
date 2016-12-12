@@ -1,7 +1,11 @@
 var fs=require("fs");
 
+var wordsMap = {};
+
 var myVocabList = [];
 function add(array,word) {
+  if (!wordsMap[word]) wordsMap[word]=0;
+  wordsMap[word]=wordsMap[word]+1;
   if (array.indexOf(word)==-1) {
     array.push(word);
   }
@@ -15,20 +19,30 @@ function load(name) {
 var sources = ["buzzfeed","clickhole","dose","nytimes"];
 
 var data = [];
+var testData = [];
 
 for (var i=0; i<sources.length; i++) {
   var d = load(sources[i]);
   for (var j=0; j<d.length; j++) {
-    data.push(d[j]);
+    if (j%10==0) {
+      testData.push(d[j]);
+    } else {
+      data.push(d[j]);
+    }
   }
 }
 
 var docs = [];
 var listClasses = [];
 
+var baits=0;
+var propers=0;
+
 for (var i=0; i<data.length; i++) {
+  if ((data[i].clickbait==0) && (i%2!=0)) { propers++; continue; };
+  //if ((data[i].clickbait==1) && (i%5!=0)) { baits++; continue; };
   var title = data[i].article_title.toLowerCase();
-  var r = new RegExp("[\\s\.\\!\\?]");
+  var r = new RegExp("[\\s\.\\!\\?\\\"\\;\\:\\/\\,]");
   var elems = title.split(r);
   for (var j=0; j<elems.length; j++) {
     if (elems[j].length>0) {
@@ -38,6 +52,17 @@ for (var i=0; i<data.length; i++) {
   docs.push(title);
   listClasses.push(data[i].clickbait);
 }
+console.log(baits+" "+propers);
+
+
+var toKeep = [];
+for (var i=0; i<myVocabList.length; i++) {
+  var word = myVocabList[i];
+  if (wordsMap[word]>1) toKeep.push(word);
+}
+
+ myVocabList=toKeep;
+
 console.log(myVocabList.length);
 console.log(data.length);
 
@@ -96,7 +121,6 @@ var trainMatrix = [];
 for (var i=0; i<docs.length; i++) {
   trainMatrix.push(setOfWords2Vec(myVocabList,docs[i].split(" ")));
 }
-console.log(trainMatrix);
 var startTrain = new Date()*1.0;
 var model=train(trainMatrix,listClasses);
 var stopTrain = new Date()*1.0;
@@ -105,6 +129,14 @@ fs.writeFile("../model/model.js","var model="+JSON.stringify(model)+";");
 fs.writeFile("../model/words.js","var myVocabList="+JSON.stringify(myVocabList)+";");
 
 //fs.writeFile("../model/listClasses.js","var listClasses="+JSON.stringify(listClasses)+";");
+
+var content = "";
+for (var i=0; i<myVocabList.length; i++) {
+  var word = myVocabList[i];
+  content+=word+","+wordsMap[word]+","+model.p0Vect[i]+","+model.p1Vect[i]+"\n";
+}
+
+fs.writeFile("sorted.csv",content);
 
 
 // test
@@ -141,11 +173,13 @@ function classify(vec2Classify, model) {
 
 function calc2(title) {
   if (!title) return [0,0];
-  var r = new RegExp("[\\s\.\\!\\?]");
+  var r = new RegExp("[\\s\.\\!\\?\\\"\\;\\:\\/\\,]");
   var elems=title.toString().toLowerCase().split(r);
   if (elems.length<3) return [0,0];
   return classify(setOfWords2Vec(myVocabList,elems),model)
 }
+
+var data = testData;
 
 var hitBaits = 0;
 var missBaits = 0;
@@ -184,7 +218,7 @@ for (var i=0; i<data.length; i++) {
 var stopTest = new Date()*1.0;
 console.log(hitBaits+" "+missBaits);
 console.log(hitProper+" "+missProper);
-console.log(sumBaits/countBaits);
-console.log(sumProper/countProper);
-console.log(stopTrain-startTrain);
-console.log(stopTest-startTest);
+console.log(hitBaits/countBaits);
+console.log(hitProper/countProper);
+// console.log(stopTrain-startTrain);
+// console.log(stopTest-startTest);

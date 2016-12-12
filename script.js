@@ -42,23 +42,27 @@ function classify(vec2Classify, model) {
 
 function calc(title) {
   if (!title) return [0,0];
-  var elems=title.toString().toLowerCase().split(" ");
+  var r = new RegExp("[\\s\.\\!\\?\\\"\\;\\:\\/\\,]");
+  var elems=title.toString().toLowerCase().split(r);
   if (elems.length<3) return [0,0];
   return classify(setOfWords2Vec(myVocabList,elems),model)
 }
 
 function markClickBaitLinks() {
   var links=document.getElementsByTagName("a");
-  console.log("will process "+links.length+" links.")
+  // console.log("will process "+links.length+" links.")
   for (var i=0; i<links.length; i++) {
+    if (links[i].clickbait) continue;
     var title = links[i].innerText;
     var priors=calc(title);
     if (priors[0]>priors[1]) {
       links[i].innerHTML+="<span title='"+priors[0]+"/"+priors[1]+" "+priors[2]+" "+priors[3]+"'>&#x1f4a9;</span>";
+      links[i].clickbait="true";
       //t[i].innerHTML+="&#x1f4a9;";
     }
   }
-  console.log("processed")
+  // console.log("processed")
+  setTimeout(markClickBaitLinks,1000);
 }
 
 setTimeout(markClickBaitLinks,1000);
