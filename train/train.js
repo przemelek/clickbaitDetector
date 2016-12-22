@@ -56,8 +56,12 @@ console.log(baits+" "+propers);
 
 
 var toKeep = [];
+var numberRegEx = new RegExp("\\d+")
 for (var i=0; i<myVocabList.length; i++) {
   var word = myVocabList[i];
+  if (word*1==word) {
+   continue;
+  }
   if (wordsMap[word]>1) toKeep.push(word);
 }
 
