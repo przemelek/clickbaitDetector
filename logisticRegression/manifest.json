@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "ClickBaitDetectorLR",
+  "version": "0.0.4.1",
+  "description": "Looks for clickbait links (with logistic regression)",
+  "content_scripts": [
+    {
+      "matches" : ["http://*/*", "https://*/*"],
+      "js": ["model/all_words.js","model/theta.js",
+        "script.js"]
+    }
+  ],
+  "permissions": [
+    "tabs", "http://*/*", "https://*/*", "storage"
+  ]
+}
